@@ -62,3 +62,4 @@ It has two jobs:
 
 To make it a hard PR gate, mark both checks (**CI / Lint**, **CI / Test**) as required in the repository's branch protection settings for `main`.
 auto-merge test change
+wait-by-default smoke 13:26:19
