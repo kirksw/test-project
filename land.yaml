@@ -10,6 +10,6 @@ publish:
 
 merge:
   # human (default): land stops at ready_for_merge and a human merges.
-  mode: human
+  mode: auto
   method: squash
   delete_branch: true

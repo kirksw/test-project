@@ -61,3 +61,4 @@ It has two jobs:
 - **Test**: `go vet`, `go test -race` with coverage, and `go build`.
 
 To make it a hard PR gate, mark both checks (**CI / Lint**, **CI / Test**) as required in the repository's branch protection settings for `main`.
+auto-merge test change
