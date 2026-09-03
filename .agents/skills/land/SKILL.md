@@ -17,7 +17,9 @@ Run from the repository root:
 land --json
 ```
 
-Then act on the report:
+The command polls continuous integration until checks settle (default timeout 30 minutes), so one run usually returns a terminal verdict; in `--json` mode progress streams to stderr while stdout stays a single report document — parse stdout only.
+
+Act on the report:
 
 - `landed: true` — done.
 Report the `phase` (`merged` for pull requests, `landed` for direct pushes) and stop.
@@ -28,8 +30,7 @@ Report the `phase` (`merged` for pull requests, `landed` for direct pushes) and 
 - `blockedOn: validation` — the `validation` array in the report names the failing command and captures its output; fix the code, commit, then rerun.
 - `blockedOn: ci_failed` — the `checks` array names the failing checks.
 Inspect their logs with `gh run view` or `gh pr view --json`, fix the code, commit, then rerun.
-- `blockedOn: ci_pending` or phase `published` — CI is running.
-Wait (roughly a minute between attempts), then rerun; do not busy-loop.
+- `blockedOn: ci_pending` after a full wait — CI is slower than the timeout; rerun `land` (or raise `--wait-timeout`), and mention it to the user if it keeps timing out.
 - `blockedOn: human_merge` (phase `ready_for_merge`) — policy requires a human to merge; report the pull-request URL and stop.
 - `blockedOn: pull_request_closed` — a human closed the pull request; stop and ask how to proceed.
 
@@ -37,6 +38,6 @@ Wait (roughly a minute between attempts), then rerun; do not busy-loop.
 
 - `land` is the only mutation path for publishing: never `git push`, `gh pr create`, or `gh pr merge` by hand, and never force-push.
 - Never commit secrets, generated files, or unrelated changes just to clear `dirty_tree`; ask when in doubt.
-- Use `land status --json`, `land validate --json`, and `land verify --json` for inspection without side effects.
-- `land submit` publishes without CI follow-up; the bare `land` command is the full loop.
+- Use `land status --json`, `land validate --json`, `land verify --json`, or `land --no-wait --json` for inspection without waiting or side effects.
+- `land submit` publishes without CI follow-up; the bare `land` command is the full wait-and-land loop.
 - Merge policy comes from `land.yaml`: `merge.mode: human` (default) stops at `ready_for_merge`; `merge.mode: auto` lets land merge once every check passes.
