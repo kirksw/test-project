@@ -1,0 +1,15 @@
+version: 1
+base: main
+
+validation:
+  lint: go vet ./...
+  test: go test ./...
+
+publish:
+  strategy: pull_request
+
+merge:
+  # human (default): land stops at ready_for_merge and a human merges.
+  mode: human
+  method: squash
+  delete_branch: true
